@@ -1,0 +1,7 @@
+---
+version: "v0.6.2"
+go_version: "1.22-alpine"
+chain_repository: "https://github.com/nolus-protocol/nolus-core"
+
+daemon_name: "nolusd"
+daemon_home: "$HOME/.nolus"

@@ -1,0 +1,7 @@
+---
+version: "v1.0.2"
+go_version: "1.22-alpine"
+chain_repository: "https://github.com/atomone-hub/govgen"
+
+daemon_name: "govgend"
+daemon_home: "$HOME/.govgen"

@@ -1,0 +1,7 @@
+---
+version: "v23.1.0"
+go_version: "1.22-alpine"
+chain_repository: "https://github.com/CosmosContracts/juno"
+
+daemon_name: "junod"
+daemon_home: "$HOME/.juno"
