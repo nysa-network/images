@@ -13,10 +13,9 @@ jobs:
       matrix:
         chain:
           # TODO: make it dynamic
-          - cosmoshub
-          - govgen
           - juno
           - nolus
+          - govgen
 
     runs-on: ubuntu-latest
     steps:
