@@ -31,7 +31,7 @@ RUN --mount=type=cache,target=/root/.cache/go-build \
     export ARCH=$(uname -m); \
     WASM_VERSION=$(go list -m all | grep github.com/CosmWasm/wasmvm | awk '{print $2}'); \
     [ -z ${WASM_VERSION} ] || wget -O /lib/libwasmvm_muslc.a https://github.com/CosmWasm/wasmvm/releases/download/${WASM_VERSION}/libwasmvm_muslc.${ARCH}.a; \
-    cp -v /lib/libwasmvm_muslc.a /lib/libwasmvm_muslc.${ARCH}.a; \
+    [ -f "/lib/libwasmvm_muslc.a" ] && cp -v /lib/libwasmvm_muslc.a /lib/libwasmvm_muslc.${ARCH}.a; \
     go mod download;
 
 # Build chain binary
