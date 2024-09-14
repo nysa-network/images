@@ -13,6 +13,7 @@ jobs:
       matrix:
         chain:
           # TODO: make it dynamic
+          - axone
           - juno
           - nolus
           - govgen
