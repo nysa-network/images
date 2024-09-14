@@ -13,19 +13,19 @@ jobs:
           # TODO: make it dynamic
           - axone
           - chihuahua
-          - juno
-          - nolus
           - govgen
-    continue-on-error: true
+          - juno
+          - ki
+          - nolus
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - uses: actions/setup-go@v3
+      - uses: actions/setup-go@v5
         with:
           cache: true
-          cache-dependency-path: "**/build.yml"
+          cache-dependency-path: "**/build.yaml"
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -35,16 +35,18 @@ jobs:
         with:
           path: |
             go-build-cache
+            go-mod-cache
           key: ${{ runner.os }}-go-build-cache-${{ hashFiles('**/build.yaml') }}
           restore-keys: |
             ${{ runner.os }}-go-build-cache
 
-      - name: inject go-build-cache into docker
+      - name: inject go-cache into docker
         uses: reproducible-containers/buildkit-cache-dance@v3.1.2
         with:
           cache-map: |
             {
-              "go-build-cache": "/root/.cache/go-build"
+              "go-build-cache": "/root/.cache/go-build",
+              "go-mod-cache": "/go/pkg/mod"
             }
 
       - name: Login to GitHub Container Registry
@@ -106,7 +108,7 @@ jobs:
       # in that case, build a different image
 
       - name: Build and push
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v6
         if: "steps.image_exists.outcome == 'failure'"
         with:
           file: "./Dockerfile"
