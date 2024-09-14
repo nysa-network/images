@@ -1,0 +1,7 @@
+---
+version: "v7.0.1"
+go_version: "1.22-alpine3.18"
+chain_repository: "https://github.com/ChihuahuaChain/chihuahua"
+
+daemon_name: "chihuahuad"
+daemon_home: "$HOME/.chihuahuad"
