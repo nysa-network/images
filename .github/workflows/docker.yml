@@ -16,11 +16,14 @@ jobs:
           - juno
           - nolus
           - govgen
-
+    continue-on-error: true
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
 
         # TODO: first check if docker image not already exist
 
@@ -86,11 +89,21 @@ jobs:
             type=raw,value=latest
             type=raw,value=${{ steps.version.outputs.result }}
 
+      - name: Check if image already exist
+        id: image_exists
+        continue-on-error: true
+        uses: cloudposse/github-action-docker-image-exists@0.1.2
+        with:
+          image_name: "${{ github.repository }}/${{ matrix.chain }}"
+          registry: ghcr.io
+          tag: "${{ steps.version.outputs.result }}"
+
       # TODO: Check if the directory have a custom Dockerfile
       # in that case, build a different image
 
       - name: Build and push
         uses: docker/build-push-action@v3
+        if: "steps.image_exists.outcome == 'failure'"
         with:
           file: "./Dockerfile"
           context: ./${{ matrix.chain }}
