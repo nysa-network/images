@@ -16,6 +16,7 @@ jobs:
           - govgen
           - juno
           - ki
+          - nois
           - nolus
           - teritori
     runs-on: ubuntu-latest
