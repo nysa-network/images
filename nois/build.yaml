@@ -1,5 +1,5 @@
 ---
-version: "v1.0.4"
+version: "v1.0.5"
 go_version: "1.22-alpine3.18"
 chain_repository: "https://github.com/noislabs/noisd"
 
