@@ -23,31 +23,32 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - uses: actions/setup-go@v5
-        with:
-          cache: true
-          cache-dependency-path: "**/build.yaml"
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Go Build Cache for Docker
+      - name: Go package cache
         uses: actions/cache@v4
         with:
-          path: |
-            go-build-cache
-            go-mod-cache
-          key: ${{ runner.os }}-go-build-cache-${{ hashFiles('**/build.yaml') }}
+          path: go-package-cache
+          key: ${{ matrix.platform.go }}-docker-go-package-${{ hashFiles('**/build.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-go-build-cache
+            ${{ matrix.platform.go }}-docker-go-package-
 
-      - name: inject go-cache into docker
-        uses: reproducible-containers/buildkit-cache-dance@v3.1.2
+      - name: Go build cache
+        uses: actions/cache@v4
+        with:
+          path: go-build-cache
+          key: ${{ matrix.platform.go }}-docker-go-build-${{ hashFiles('**/build.yaml') }}
+          restore-keys: |
+            ${{ matrix.platform.go }}-docker-go-build-
+
+      - name: Inject go package cache into docker
+        uses: reproducible-containers/buildkit-cache-dance@v3
         with:
           cache-map: |
             {
-              "go-build-cache": "/root/.cache/go-build",
-              "go-mod-cache": "/go/pkg/mod"
+              "go-package-cache": "/root/go/pkg/mod",
+              "go-build-cache": "/root/.cache/go-build"
             }
 
       - name: Login to GitHub Container Registry
@@ -123,7 +124,7 @@ jobs:
             DAEMON_HOME=${{ steps.daemon_home.outputs.result }}
           push: ${{ github.event_name != 'pull_request' }}
           platforms: linux/amd64,linux/arm64
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
