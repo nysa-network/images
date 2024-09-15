@@ -12,6 +12,7 @@ jobs:
         chain:
           # TODO: make it dynamic
           - axone
+          - cheqd
           - chihuahua
           - govgen
           - juno
