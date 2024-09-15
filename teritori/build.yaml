@@ -1,0 +1,7 @@
+---
+version: "v2.0.6"
+go_version: "1.22-alpine3.18"
+chain_repository: "https://github.com/TERITORI/teritori-chain"
+
+daemon_name: "teritorid"
+daemon_home: "$HOME/.teritori"
